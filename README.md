@@ -10,7 +10,7 @@ We treat virtual desktops as disposable, low-cost, containerised resources, elim
 It's time to stop paying premium prices for basic computing and unnecessary software bloat.  
 `yearofthepenguin` turns the "Year of the Linux Desktop" from a running joke into a pragmatic enterprise balance sheet strategy.  
 
-## Prerequsites Matrix
+## Prerequisites Matrix
 
 | **Component**        | **Dev/Edge Profile**              | **Enterprise Profile**
 | :--- | :--- | :--- |
@@ -25,21 +25,25 @@ It's time to stop paying premium prices for basic computing and unnecessary soft
 ### 1. Ephemeral First, Persistent when Necessary  
 * **Stateless Desktop Pools:** Desktops are deployed as stateless, disposable VMs.  
 * **Persistent User Profiles:** User data and configurations are decoupled from the OS disk and mounted dynamically.  
+  
 Reason: Efficiency and stability in user experience.  
   
 ### 2. GitOps Native Management  
 * All desktop definitions, image sources, and network policies are defined declaratively.  
 * Fleet management, updates, and scaling are handled through GitOps.  
+  
 Reason: Repeatability, scalability.  
   
 ### 3. Containerised Base Images  
 * Base OS images are packaged as OCI-compliant `ContainerDisk` images stored in an image registry.  
 * Updates to the desktop OS follow standard CI/CD container build pipelines.  
+  
 Reason: Auditability, consistency, scalability.  
   
 ### 4. Zero-Client Remote Protocol Proxying  
 * Sessions are delivered via web browsers using HTML5 client streaming proxies.  
 * Users access desktops over secure HTTPS via standard OpenShift Routes.  
+  
 Reason: More stable user experience by reducing dependencies.  
   
 ## Repository Structure  
