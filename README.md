@@ -10,15 +10,17 @@ We treat virtual desktops as disposable, low-cost, containerised resources, elim
 It's time to stop paying premium prices for basic computing and unnecessary software bloat.  
 `yearofthepenguin` turns the "Year of the Linux Desktop" from a running joke into a pragmatic enterprise balance sheet strategy.  
 
-## Prerequisites Matrix
-
-| **Component**        | **Dev/Edge Profile**              | **Enterprise Profile**
-| :--- | :--- | :--- |
-| Control Plane        | Single Node OpenShift             | Multi-node OpenShift
-| Virtualization       | OpenShift Virtualization Operator | OpenShift Virtualization Operator
-| Storage Provisioner  | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
-| Storage Capabilities | RWO, Thin Prov. via LVMS          | RWX, Instant PVC Cloning, Live Migration
-| Ingress/Routing      | Standard OCP Route                | LoadBalancer
+## Requirements
+Requirements are dynamically listed and prioritised with the MoSCoW framework.
+1. The solution must be open source (no restrictions on read, write, edit, share of source code).
+2. The solution must allow users to use the web browser and achieve external network connectivity.
+3. The solution must have an active community contributing to its upstream components.
+4. The solution should use best practices for security.
+5. The solution should have no licensing or subscription costs.
+6. The solution should contribute to efficiency of the organisation's operations.
+7. The solution should contribute to the stability of the organisation's I.T. infrastructure.
+8. The solution should scale with diminishing effort and increasing returns.
+9. The solution should be easy to audit.
 
 ## Architectural Concepts and Design Decisions  
 
@@ -27,24 +29,39 @@ It's time to stop paying premium prices for basic computing and unnecessary soft
 * **Persistent User Profiles:** User data and configurations are decoupled from the OS disk and mounted dynamically.  
   
 Reason: Efficiency and stability in user experience.  
+Requirements: [6,7]  
   
 ### 2. GitOps Native Management  
 * All desktop definitions, image sources, and network policies are defined declaratively.  
 * Fleet management, updates, and scaling are handled through GitOps.  
   
-Reason: Repeatability, scalability.  
+Reason: Reliability, repeatability, scalability. 
+Requirements: [7,8]  
   
 ### 3. Containerised Base Images  
 * Base OS images are packaged as OCI-compliant `ContainerDisk` images stored in an image registry.  
 * Updates to the desktop OS follow standard CI/CD container build pipelines.  
   
 Reason: Auditability, consistency, scalability.  
+Requirements: [7,8,9]  
   
 ### 4. Zero-Client Remote Protocol Proxying  
 * Sessions are delivered via web browsers using HTML5 client streaming proxies.  
 * Users access desktops over secure HTTPS via standard OpenShift Routes.  
   
 Reason: More stable user experience by reducing dependencies.  
+Requirements: [7]
+
+  
+## Solution Architecture
+
+| **Component**        | **Dev/Edge Profile**              | **Enterprise Profile**
+| :--- | :--- | :--- |
+| Control Plane        | Single Node OpenShift             | Multi-node OpenShift
+| Virtualization       | OpenShift Virtualization Operator | OpenShift Virtualization Operator
+| Storage Provisioner  | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
+| Storage Capabilities | RWO, Thin Prov. via LVMS          | RWX, Instant PVC Cloning, Live Migration
+| Ingress/Routing      | Standard OCP Route                | LoadBalancer
   
 ## Repository Structure  
   
