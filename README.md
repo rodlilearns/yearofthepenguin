@@ -85,7 +85,7 @@ Requirements: [7]
 
 ## Roadmap and Future Work
 * [x] Control Plane: Deploy Single Node OpenShift
-* [] Virtualization: Deploy OpenShift Virtualization
+* [x] Virtualization: Deploy OpenShift Virtualization
 * [] Storage: Deploy LVM Storage Operator
 * [] Networking: Deploy svc and routes
 * [] Identity and Access Management: Deploy Keycloak
