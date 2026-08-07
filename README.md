@@ -30,15 +30,15 @@ Requirements are dynamically listed and prioritised with the MoSCoW framework.
 * Dynamic resource allocation based on real-time metric triggers (active sessions, authentication queues, time-of-day schedules)
 * Warm Pool Buffer Management: Keep a margin of pre-initialised unallocated desktop instances in memory to eliminate login latency during peak traffic spikes.
   
-Reason: Efficiency and stability in user experience by ensuring linear performance scaling while reducing idle compute costs during off-peak hours.
+Reason: Efficiency and stability in user experience by ensuring linear performance scaling while reducing idle compute costs during off-peak hours.  
 Requirements: [6,7,8]  
   
 ### 2. GitOps Native Management  
 * All desktop definitions, image sources, and network policies are defined declaratively.  
 * Fleet management, updates, and scaling are handled through GitOps.  
   
-Reason: Reliability, repeatability, scalability. 
-Requirements: [7,8]  
+Reason: Reliability, repeatability, scalability.  
+Requirements: [7,8]   
   
 ### 3. Containerised Base Images  
 * Base OS images are packaged as OCI-compliant `ContainerDisk` images stored in an image registry.  
