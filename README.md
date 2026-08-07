@@ -28,7 +28,7 @@ Requirements are dynamically listed and prioritised with the MoSCoW framework.
 * Stateless Desktop Pools: Desktops are deployed as stateless, disposable VMs.  
 * Persistent User Profiles: User data and configurations are decoupled from the OS disk and mounted dynamically.  
 * Dynamic resource allocation based on real-time metric triggers (active sessions, authentication queues, time-of-day schedules)
-* Warm Pool Buffer Management: Keep a margin of pre-initialisaed unallocated desktop instances in memory to eliminate login latency during peak traffic spikes.
+* Warm Pool Buffer Management: Keep a margin of pre-initialised unallocated desktop instances in memory to eliminate login latency during peak traffic spikes.
   
 Reason: Efficiency and stability in user experience by ensuring linear performance scaling while reducing idle compute costs during off-peak hours.
 Requirements: [6,7,8]  
