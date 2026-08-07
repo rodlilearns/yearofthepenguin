@@ -84,13 +84,18 @@ Requirements: [4,6,7,9]
 │       ├── 02-hyperconverged.yaml      # Virtualization | Deploy Virtualization Control Plane Workload
 │       ├── 03-lvms.yaml                # Storage        | Install Storage Operator
 │       ├── 04-lvmcluster.yaml          # Storage        | Deploy Block Storage
-│       ├── 05-vm-datavolume.yaml       
+│       ├── 05-vm-datavolume.yaml       # VM             | DataVolume 
 │       ├── 06-vdi-space.yaml
 │       └── 07-fedora-vdi-template.yaml
 └── README.md
 ```
   
 ## Quickstart (Development Profile)  
+1. Install SNO via assisted installer.
+2. Login to the cluster via CLI using the kubeadmin credentials and kubeconfig file.
+   `$ export KUBECONFIG=~/path/to/kubeconfig`  
+   `$ oc login https://API:6443 -u kubeadmin`  
+3. Apply manifests.
 
 ## Roadmap and Future Work
 * [x] Control Plane: Deploy Single Node OpenShift
