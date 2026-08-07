@@ -23,13 +23,15 @@ Requirements are dynamically listed and prioritised with the MoSCoW framework.
 9. The solution should be easy to audit.
 
 ## Architectural Concepts and Design Decisions  
+Architectural concepts acknowledge industry best practices, and design decision consider industry best practices, and requirements to arrive at a decision for the solution.
 
 ### 1. Ephemeral First, Persistent when Necessary  
 * Stateless Desktop Pools: Desktops are deployed as stateless, disposable VMs.  
 * Persistent User Profiles: User data and configurations are decoupled from the OS disk and mounted dynamically.  
 * Dynamic resource allocation based on real-time metric triggers (active sessions, authentication queues, time-of-day schedules)
 * Warm Pool Buffer Management: Keep a margin of pre-initialised unallocated desktop instances in memory to eliminate login latency during peak traffic spikes.
-  
+
+Design Decision: Use OpenShift platform and Virtualization Operator.
 Reason: Efficiency and stability in user experience by ensuring linear performance scaling while reducing idle compute costs during off-peak hours.  
 Requirements: [6,7,8]  
   
@@ -37,6 +39,7 @@ Requirements: [6,7,8]
 * All desktop definitions, image sources, and network policies are defined declaratively.  
 * Fleet management, updates, and scaling are handled through GitOps.  
   
+Design Decision: Use GitHub to store all code, and use infrastructure as code wherever possible.
 Reason: Reliability, repeatability, scalability.  
 Requirements: [7,8]   
   
@@ -44,6 +47,7 @@ Requirements: [7,8]
 * Base OS images are packaged as OCI-compliant `ContainerDisk` images stored in an image registry.  
 * Updates to the desktop OS follow standard CI/CD container build pipelines.  
   
+Design Decision: Create a Container Image for a minimal viable desktop and upload to quay.io.
 Reason: Auditability, consistency, scalability.  
 Requirements: [7,8,9]  
   
@@ -51,13 +55,15 @@ Requirements: [7,8,9]
 * Sessions are delivered via web browsers using HTML5 client streaming proxies.  
 * Users access desktops over secure HTTPS via standard OpenShift Routes.  
   
+Design Decision: Use Apache Guacamole to deliver desktop streaming experience.
 Reason: More stable user experience by reducing dependencies.  
 Requirements: [7]
 
 ### 5. Immutable Infrastructure via Just-in-Time Provisioning
 * Operating system upgrades, patches, configuration changes are implemented through base container images rather than live Virtual Machines.
 * Rolling shred-and-replace lifecycle, triggering cold-boot instantiations from the latest verified base image.
-
+  
+Design Decision: Update code to make updates to the system.
 Reason: Eliminated configuration drift, prevents persistent malware infection, simplifies system auditing to single image digests.  
 Requirements: [4,6,7,9]  
 
