@@ -12,7 +12,7 @@ It's time to stop paying premium prices for basic computing and unnecessary soft
 
 ## Requirements
 Requirements are dynamically listed and prioritised with the MoSCoW framework.
-1. The solution must be open source (no restrictions on read, write, edit, share of source code).
+1. The solution must be open source (no restrictions on the ability to read, write, edit, share source code).
 2. The solution must allow users to use the web browser and achieve external network connectivity.
 3. The solution must have an active community contributing to its upstream components.
 4. The solution should use best practices for security.
@@ -25,11 +25,13 @@ Requirements are dynamically listed and prioritised with the MoSCoW framework.
 ## Architectural Concepts and Design Decisions  
 
 ### 1. Ephemeral First, Persistent when Necessary  
-* **Stateless Desktop Pools:** Desktops are deployed as stateless, disposable VMs.  
-* **Persistent User Profiles:** User data and configurations are decoupled from the OS disk and mounted dynamically.  
+* Stateless Desktop Pools: Desktops are deployed as stateless, disposable VMs.  
+* Persistent User Profiles: User data and configurations are decoupled from the OS disk and mounted dynamically.  
+* Dynamic resource allocation based on real-time metric triggers (active sessions, authentication queues, time-of-day schedules)
+* Warm Pool Buffer Management: Keep a margin of pre-initialisaed unallocated desktop instances in memory to eliminate login latency during peak traffic spikes.
   
-Reason: Efficiency and stability in user experience.  
-Requirements: [6,7]  
+Reason: Efficiency and stability in user experience by ensuring linear performance scaling while reducing idle compute costs during off-peak hours.
+Requirements: [6,7,8]  
   
 ### 2. GitOps Native Management  
 * All desktop definitions, image sources, and network policies are defined declaratively.  
@@ -52,6 +54,13 @@ Requirements: [7,8,9]
 Reason: More stable user experience by reducing dependencies.  
 Requirements: [7]
 
+### 5. Immutable Infrastructure via Just-in-Time Provisioning
+* Operating system upgrades, patches, configuration changes are implemented through base container images rather than live Virtual Machines.
+* Rolling shred-and-replace lifecycle, triggering cold-boot instantiations from the latest verified base image.
+
+Reason: Eliminated configuration drift, prevents persistent malware infection, simplifies system auditing to single image digests.  
+Requirements: [4,6,7,9]  
+
   
 ## Solution Architecture
 
@@ -59,25 +68,25 @@ Requirements: [7]
 | :--- | :--- | :--- |
 | Control Plane        | Single Node OpenShift             | Multi-node OpenShift
 | Virtualization       | OpenShift Virtualization Operator | OpenShift Virtualization Operator
-| Storage Provisioner  | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
-| Storage Capabilities | RWO, Thin Prov. via LVMS          | RWX, Instant PVC Cloning, Live Migration
-| Ingress/Routing      | Standard OCP Route                | LoadBalancer
+| Storage              | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
+| Network              | Projects, Routes                  | Projects, Routes, netpol, LoadBalancer and VPN
+| VM                   | Container Image and VM Template   | Container Image and VM Template
+| Identity and Access  | Keycloak                          | Keycloak
   
 ## Repository Structure  
   
 ```plaintext
 .
-├── manifests/
-│   ├── base/                  # Core KubeVirt templates and preferences
-│   │   ├── datavolumes/       # Base OS disk definitions
-│   │   ├── vm-templates/      # VirtualMachine custom resources
-│   │   └── routes/            # OpenShift Routes & Ingress config
-│   └── overlays/              # Environment customizations
-│       ├── dev-sno/           # Configuration tuned for Single Node OpenShift (LVMS)
-│       └── enterprise-odf/    # Configuration tuned for ODF (RWX / Fast Cloning)
-├── automation/
-│   ├── cloud-init/            # Ignition & cloud-init user data scripts
-│   └── containerdisks/        # Containerfiles for OS base images
+├── LICENSE
+├── manifests
+│   └── base
+│       ├── 01-openshift-virt.yaml      # Virtualization | Install Virtualization Operator
+│       ├── 02-hyperconverged.yaml      # Virtualization | Deploy Virtualization Control Plane Workload
+│       ├── 03-lvms.yaml                # Storage        | Install Storage Operator
+│       ├── 04-lvmcluster.yaml          # Storage        | Deploy Block Storage
+│       ├── 05-vm-datavolume.yaml       
+│       ├── 06-vdi-space.yaml
+│       └── 07-fedora-vdi-template.yaml
 └── README.md
 ```
   
@@ -86,7 +95,7 @@ Requirements: [7]
 ## Roadmap and Future Work
 * [x] Control Plane: Deploy Single Node OpenShift
 * [x] Virtualization: Deploy OpenShift Virtualization
-* [] Storage: Deploy LVM Storage Operator
+* [x] Storage: Deploy LVM Storage Operator
 * [] Networking: Deploy svc and routes
+* [] VM: Create Container Image and Deploy VM Template
 * [] Identity and Access Management: Deploy Keycloak
-* [] Desktop container images: Create a minimal viable desktop image (I just need a browser)
