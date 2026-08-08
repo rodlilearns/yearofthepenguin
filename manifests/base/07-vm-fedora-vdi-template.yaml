@@ -1,0 +1,20 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: fedora-vdi-desktop-01-clone
+  namespace: vdi-desktops
+spec:
+  source:
+    pvc:
+      namespace: openshift-cnv
+      name: fedora-vdi-golden-image
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: lvms-vdi-local-block
+    volumeMode: Block
+# Apply this manifest as the vdi-sa
+# oc apply -f manifests/base/07-vm-fedora-vdi-template.yaml --as=system:serviceaccount:vdi-desktops:vdi-sa
