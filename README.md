@@ -70,14 +70,15 @@ Requirements: [4,6,7,9]
   
 ## Solution Architecture
 
-| **Component**        | **Dev/Edge Profile**              | **Enterprise Profile**
+| **Component**            | **Dev/Edge Profile**              | **Enterprise Profile**
 | :--- | :--- | :--- |
-| Control Plane        | Single Node OpenShift             | Multi-node OpenShift
-| Virtualization       | OpenShift Virtualization Operator | OpenShift Virtualization Operator
-| Storage              | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
-| Network              | Projects, Routes                  | Projects, Routes, netpol, LoadBalancer and VPN
-| VM                   | Container Image and VM Template   | Container Image and VM Template
-| Identity and Access  | Keycloak                          | Keycloak
+| Control Plane            | Single Node OpenShift             | Multi-node OpenShift
+| Virtualization           | OpenShift Virtualization Operator | OpenShift Virtualization Operator
+| Storage                  | LVM Storage Operator (LVMS)       | OpenShift Data Foundation (ODF)
+| VM                       | Containerfile, DV                 | Containerfile, DV
+| Identity and Access Mgmt | Keycloak                          | Keycloak
+| Access Layer             | OpenShift Web Console             | Apache Guacamole
+| Network                  | WireGuard VPN                     | F5 LB, #TODO#
   
 ## Repository Structure  
   
@@ -107,6 +108,11 @@ Requirements: [4,6,7,9]
 * [x] Control Plane: Deploy Single Node OpenShift
 * [x] Virtualization: Deploy OpenShift Virtualization
 * [x] Storage: Deploy LVM Storage Operator
-* [] Networking: Deploy svc and routes
-* [] VM: Create Container Image and Deploy VM Template
+* [x] VM: Create namespace and service account for cross-namespace PVC/DV cloning
+* [x] VM: Download KubeVirt curated Containerdisk as a Golden Image DV
+* [x] VM: Clone Golden Image DV for a VM
+* [x] VM: Create VM from cloned DV
+Milestone: Created a Virtual Desktop with a graphical desktop environment via OpenShift Virtualization on OpenShift Container Platform
+* [] VM: Refactor manifests to support variable-driven desktop creation
 * [] Identity and Access Management: Deploy Keycloak
+* [] Networking: Deploy WireGuard VPN
