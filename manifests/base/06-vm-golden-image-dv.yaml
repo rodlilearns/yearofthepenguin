@@ -1,0 +1,21 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: fedora-vdi-golden-image
+  namespace: openshift-cnv
+  annotations:
+    cdi.kubevirt.io/storage.bind.immediate.requested: "true"
+spec:
+  source:
+    registry:
+      url: "docker://quay.io/containerdisks/fedora:44"
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: lvms-vdi-local-block
+    volumeMode: Block
+# Look at all these containerdisk images maintained by KubeVirt.
+# https://quay.io/organization/containerdisks
